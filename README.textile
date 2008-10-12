@@ -1,0 +1,57 @@
+h1. Clustering algorithms for Clojure
+
+h2. Usage
+
+<pre>
+  <code>
+    (ns my-namespace (:use cluster))    
+  </code>
+</pre>
+
+h3. k-means
+
+Currently we expose two clustering algorithms: k-means and hierarchical. Use the k-means algorithm like so: 
+
+<pre>
+  <code>
+    ;; kcluster --
+    ;;   :vectors - a sequence of vectors which you want clustered
+    ;;   :count - number of clusters to find
+    ;;   :range-start - lower limit for the randomized cluster nodes
+    ;;   :range-end - upper limit for the randomized cluster nodes
+    (kcluster [[1 2 3] [3 4 5] [5 6 7]] 2 0 7)
+  </code>
+</pre>
+
+So, _range-start_ and _range-end_ may needa bit of clarification.  A k-means algorithm works by randomly
+placing a number of nodes amonst the nodes you want clustered, then moving those nodes until they fall
+into the center of a cluster.  Those random nodes need upper and lower limits.  Usually these are just
+the highest and lowest possible values for numbers in the vectors which you're clustering.
+
+The return value of _kcluster_ is a tuple.  The first value is a sequence of vectors which contain the
+indices of the clustered vectors. So if you passed in five vectors the first return value might look like:
+<code>[[0 3 4] [1 2]]</code>. The second value contains the final vectors for the cluster nodes.
+
+
+h3. Hierarchical
+
+<pre>
+  <code>
+    ;; hcluster --
+    ;;   :nodes - a sequence of maps in the form: { :vec [1 2 3] }
+    (hcluster [{:vec [1 2 3]} {:vec [3 4 5]} {:vec [7 9 9]}])
+  </code>
+</pre>
+
+The return value of _hcluster_ is a tree of Maps.  It might look something like this, for the above input:
+
+<pre>
+  <code>
+    {:vec (9/2 6 13/2)
+     :right {:vec [7 9 9]},
+     :left  {:right {:vec [3 4 5]}, 
+             :left  {:vec [1 2 3]}, 
+             :vec (2 3 4)}}
+     
+  </code>
+</pre>
