@@ -21,7 +21,7 @@
                          (sqrt (- (sum (map #(square %) y))
                                   (* o (square sum-y)))))]
     (if (= 0.0 prod-of-sqrts)
-      0.0
+      nil
       (/ (- (sum (map #(* %1 %2) x y))
             (* o sum-x sum-y)) 
          prod-of-sqrts))))
@@ -45,7 +45,7 @@
   ([target others] (closest-vector target others 0))
   ([target others n]
    (let [current (first others)
-         sim (pearson target current)
+         sim (or (pearson target current) 0.0)
          others (rest others)]
      (if (= 0 (count others))
        [sim, n]
