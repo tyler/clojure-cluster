@@ -9,14 +9,22 @@
 
 (defn sum [v] (reduce + v))
 
-(defn pearson [v1 v2]
-  (let [v1mean (mean v1)
-        v2mean (mean v2)]
-    (/ (sum (map
-             #(* (- %1 v1mean) (- %2 v2mean))
-             v1 v2))
-       (sqrt (* (sum (map #(square (- % v1mean)) v1))
-                (sum (map #(square (- % v2mean)) v2)))))))
+
+
+(defn pearson [x y]
+  (let [n (count x)
+        o (/ 1 n)
+        sum-y (sum y)
+        sum-x (sum x)
+        prod-of-sqrts (* (sqrt (- (sum (map #(square %) x))
+                                  (* o (square sum-x)))) 
+                         (sqrt (- (sum (map #(square %) y))
+                                  (* o (square sum-y)))))]
+    (if (= 0.0 prod-of-sqrts)
+      0.0
+      (/ (- (sum (map #(* %1 %2) x y))
+            (* o sum-x sum-y)) 
+         prod-of-sqrts))))
 
 (defn compact [v]
   (loop [v1 v out '()]
@@ -98,11 +106,6 @@
       (recur (dec how-many-left)
              (cons (random-vector length range-start range-end) vectors)))))
 
-(defn list-of [how-many value]
-  (loop [how-many-left how-many
-         list []]
-    (if (= 0 how-many-left)
-      list
-      (recur (dec how-many-left) (conj list value)))))
+
 
 

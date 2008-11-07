@@ -25,7 +25,7 @@
   ([vectors nodes]
      (let [clusters
            (loop [index 0
-                  clusters (list-of (count nodes) [])]
+                  clusters (vec (replicate (count nodes) []))]
              (if (= (count vectors) index)
                clusters
                (let [vector (nth vectors index)
@@ -48,7 +48,7 @@
    The return value will be a tree of Maps of the form:
      { :vec [] :left { :vec ... } :right { :vec ... } }"
   [nodes]
-  (if (= 1 (count nodes))
+  (if (< (count nodes) 2)
     nodes
     (let [vectors (map #(get % :vec) nodes)
           [closest-pair cls] (closest-vectors vectors)
