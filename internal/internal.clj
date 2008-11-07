@@ -26,14 +26,10 @@
             (* o sum-x sum-y)) 
          prod-of-sqrts))))
 
+
+
 (defn compact [v]
-  (loop [v1 v out '()]
-    (if (= 0 (count v1))
-      out
-      (recur (rest v1) 
-             (if (nil? (first v1))
-               out 
-               `(~@out ~(first v1)))))))
+  (filter #(not (nil? %)) v))
     
 
 (defn average-vectors [vectors]
