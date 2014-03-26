@@ -35,7 +35,7 @@
 (defn average-vectors [vectors]
   (loop [rests vectors out '()]
     (let [firsts (compact (map first rests))]
-      (if (= 0 (count rests))
+      (if (= 0 (count firsts))
         out
         (recur (compact (map rest rests)) `(~@out ~(mean firsts)))))))
 
